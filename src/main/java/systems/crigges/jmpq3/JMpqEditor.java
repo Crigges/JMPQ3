@@ -144,7 +144,7 @@ public class JMpqEditor implements AutoCloseable {
             setupTempDir();
 
             final OpenOption[] fcOptions = canWrite ? new OpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE}
-                    : new OpenOption[]{StandardOpenOption.READ};
+                : new OpenOption[]{StandardOpenOption.READ};
             fc = FileChannel.open(mpqArchive, fcOptions);
 
             headerOffset = searchHeader();
@@ -616,13 +616,12 @@ public class JMpqEditor implements AutoCloseable {
 
         return new MpqFile(buffer, b, discBlockSize, name);
     }
-    
+
     /**
      * Gets the mpq file.
      *
      * @param block a block
      * @return the mpq file
-     *
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public MpqFile getMpqFileByBlock(BlockTable.Block block) throws IOException {
@@ -633,25 +632,25 @@ public class JMpqEditor implements AutoCloseable {
         fc.position(headerOffset + block.getFilePos());
         readFully(buffer, fc);
         buffer.rewind();
-        
+
         return new MpqFile(buffer, block, discBlockSize, "");
     }
-    
+
     /**
      * Gets the mpq files.
      *
      * @return the mpq files
-     *
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public List<MpqFile> getMpqFilesByBlockTable() throws IOException {
         List<MpqFile> mpqFiles = new ArrayList<>();
         ArrayList<Block> list = blockTable.getAllVaildBlocks();
         for (Block block : list) {
-            try{
+            try {
                 MpqFile mpqFile = getMpqFileByBlock(block);
                 mpqFiles.add(mpqFile);
-            } catch (IOException ignore) {}
+            } catch (IOException ignore) {
+            }
         }
         return mpqFiles;
     }
@@ -682,8 +681,8 @@ public class JMpqEditor implements AutoCloseable {
      * @throws NonWritableChannelException the non writable channel exception
      * @throws IllegalArgumentException    when the mpq has filename and not override
      */
-    public void insertByteArray(String name, byte[] input,boolean override) throws NonWritableChannelException,
-                                                                   IllegalArgumentException {
+    public void insertByteArray(String name, byte[] input, boolean override) throws NonWritableChannelException,
+        IllegalArgumentException {
         if (!canWrite) {
             throw new NonWritableChannelException();
         }
@@ -696,7 +695,7 @@ public class JMpqEditor implements AutoCloseable {
         ByteBuffer data = ByteBuffer.wrap(input);
         filenameToData.put(name, data);
     }
-    
+
     /**
      * Inserts the specified byte array into the mpq once you close the editor.
      *
@@ -708,7 +707,7 @@ public class JMpqEditor implements AutoCloseable {
     public void insertByteArray(String name, byte[] input) throws NonWritableChannelException, IllegalArgumentException {
         insertByteArray(name, input, false);
     }
-    
+
     /**
      * Inserts the specified file into the mpq once you close the editor.
      *
@@ -733,7 +732,7 @@ public class JMpqEditor implements AutoCloseable {
      * @param override   is override file
      * @throws JMpqException if file is not found or access errors occur
      */
-    public void insertFile(String name, File file, boolean backupFile, boolean override) throws IOException,IllegalArgumentException{
+    public void insertFile(String name, File file, boolean backupFile, boolean override) throws IOException, IllegalArgumentException {
         if (!canWrite) {
             throw new NonWritableChannelException();
         }
@@ -743,8 +742,8 @@ public class JMpqEditor implements AutoCloseable {
         if ((!override) && listFile.containsFile(name)) {
             throw new IllegalArgumentException("Archive already contains file with name: " + name);
         }
-    
-        try{
+
+        try {
             listFile.addFile(name);
             if (backupFile) {
                 File temp = File.createTempFile("jmpq", "backup", JMpqEditor.tempDir);
@@ -1030,8 +1029,8 @@ public class JMpqEditor implements AutoCloseable {
     public void setKeepHeaderOffset(boolean keepHeaderOffset) {
         this.keepHeaderOffset = keepHeaderOffset;
     }
-    
-    
+
+
     /**
      * Get block table block table.
      *
@@ -1040,7 +1039,7 @@ public class JMpqEditor implements AutoCloseable {
     public BlockTable getBlockTable() {
         return blockTable;
     }
-    
+
     /**
      * (non-Javadoc)
      *
@@ -1049,6 +1048,6 @@ public class JMpqEditor implements AutoCloseable {
     @Override
     public String toString() {
         return "JMpqEditor [headerSize=" + headerSize + ", archiveSize=" + archiveSize + ", formatVersion=" + formatVersion + ", discBlockSize=" + discBlockSize
-                + ", hashPos=" + hashPos + ", blockPos=" + blockPos + ", hashSize=" + hashSize + ", blockSize=" + blockSize + ", hashMap=" + hashTable + "]";
+            + ", hashPos=" + hashPos + ", blockPos=" + blockPos + ", hashSize=" + hashSize + ", blockSize=" + blockSize + ", hashMap=" + hashTable + "]";
     }
 }

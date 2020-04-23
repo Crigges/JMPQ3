@@ -31,12 +31,12 @@ public class MpqTests {
 
     private static File[] getMpqs() throws IOException {
         File[] files = new File(MpqTests.class.getClassLoader().getResource("./mpqs/").getFile())
-                .listFiles((dir, name) -> name.endsWith(".w3x") || name.endsWith("" + ".mpq") || name.endsWith(".scx"));
+            .listFiles((dir, name) -> name.endsWith(".w3x") || name.endsWith("" + ".mpq") || name.endsWith(".scx"));
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 Path target = files[i].toPath().resolveSibling(files[i].getName() + "_copy");
                 files[i] = Files.copy(files[i].toPath(), target,
-                        StandardCopyOption.REPLACE_EXISTING).toFile();
+                    StandardCopyOption.REPLACE_EXISTING).toFile();
             }
         }
         MpqTests.files = files;
@@ -210,8 +210,8 @@ public class MpqTests {
         File[] mpqs = getMpqs();
         for (File mpq : mpqs) {
             JMpqEditor[] mpqEditors = new JMpqEditor[]{new JMpqEditor(mpq, MPQOpenOption.READ_ONLY, MPQOpenOption.FORCE_V0),
-                    new JMpqEditor(mpq, MPQOpenOption.READ_ONLY, MPQOpenOption.FORCE_V0),
-                    new JMpqEditor(mpq, MPQOpenOption.READ_ONLY, MPQOpenOption.FORCE_V0)};
+                new JMpqEditor(mpq, MPQOpenOption.READ_ONLY, MPQOpenOption.FORCE_V0),
+                new JMpqEditor(mpq, MPQOpenOption.READ_ONLY, MPQOpenOption.FORCE_V0)};
             for (JMpqEditor mpqEditor1 : mpqEditors) {
                 mpqEditor1.extractAllFiles(JMpqEditor.tempDir);
             }
@@ -335,8 +335,8 @@ public class MpqTests {
                 return;
             }
             //test override
-            mpqEditor.insertFile(filename, getFile(filename), false,true);
-            mpqEditor.insertFile(filename, getFile(filename), false,true);
+            mpqEditor.insertFile(filename, getFile(filename), false, true);
+            mpqEditor.insertFile(filename, getFile(filename), false, true);
 
             mpqEditor.deleteFile(filename);
         }
@@ -376,7 +376,8 @@ public class MpqTests {
         Set<File> ret = new LinkedHashSet<>();
 
         for (File file : dir.listFiles()) {
-            if (file.isDirectory()) ret.addAll(getFiles(file)); else ret.add(file);
+            if (file.isDirectory()) ret.addAll(getFiles(file));
+            else ret.add(file);
         }
 
         return ret;
@@ -408,7 +409,7 @@ public class MpqTests {
 
         mpqEditor.close();
     }
-    
+
     @Test()
     public void testForGetMpqFileByBlock() throws IOException {
         File[] mpqs = getMpqs();
@@ -417,12 +418,11 @@ public class MpqTests {
                 continue;
             }
             try (JMpqEditor mpqEditor = new JMpqEditor(mpq, MPQOpenOption.FORCE_V0)) {
-                
+
                 Assert.assertTrue(mpqEditor.getMpqFilesByBlockTable().size() > 0);
                 BlockTable blockTable = mpqEditor.getBlockTable();
                 Assert.assertNotNull(blockTable);
-                for (BlockTable.Block block : blockTable.getAllVaildBlocks())
-                {
+                for (BlockTable.Block block : blockTable.getAllVaildBlocks()) {
                     if (block.hasFlag(MpqFile.ENCRYPTED)) {
                         continue;
                     }
